@@ -11,7 +11,7 @@ Für jede gelöste Aufgabe bekommt man Punkte. Falls man die Aufgabe direkt nach
 
 Es gibt Highscore-Listen für die Punkte und die schnellsten Lösungen.
 
-Wer Lust am Programmieren hat, kann hier einen Heidenspass bei dem knacken der nächsten Weihnachtsaufgabe finden. Aber Achtung! Das kann den Hausfrieden während der Weihnachtszeit ganz schö gefärden (ich spreche da aus Erfahrung).
+Wer Lust am Programmieren hat, kann hier einen Heidenspass bei dem knacken der nächsten Weihnachtsaufgabe finden. Aber Achtung! Das kann den Hausfrieden während der Weihnachtszeit ganz schön gefärden (ich spreche da aus Erfahrung).
 
 Die Aufgaben werden aber nicht schlecht und man kann sie natürlich auch später noch lösen :-)
 
