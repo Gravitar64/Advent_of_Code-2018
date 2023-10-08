@@ -3,21 +3,22 @@ import heapq
 
 
 def bfs(cave, target):
+  tools = {0:{1,2}, 1:{0,2}, 2:{0,1}}
   queue, best, target = [(0, 0, 0, 1)], {}, (*target,1)
   while queue:
-    minutes, x, y, cannot = heapq.heappop(queue)
-    best_key = (x, y, cannot)
+    minutes, x, y, tool = heapq.heappop(queue)
+    best_key = (x, y, tool)
     if best_key in best and best[best_key] <= minutes: continue
     best[best_key] = minutes
     if best_key == target: return minutes
 
-    for i in range(3):
-      if i == cannot or i == cave[x, y]: continue
-      heapq.heappush(queue, (minutes + 7, x, y, i))
+    for new_tool in tools[cave[x,y]]-{tool}:
+      heapq.heappush(queue, (minutes + 7, x, y, new_tool))
 
     for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
-      if (nx, ny) not in cave or cave[nx, ny] == cannot: continue
-      heapq.heappush(queue, (minutes + 1, nx, ny, cannot))
+      #tool == cave[nx,ny]; actual tool ist the forbidden one and will catch in next while-loop +7
+      if (nx, ny) not in cave or tool == cave[nx, ny]: continue 
+      heapq.heappush(queue, (minutes + 1, nx, ny, tool))
 
 
 def solve(depth, tx, ty, cave = {}):
