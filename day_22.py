@@ -22,8 +22,8 @@ def bfs(cave, target):
 
 def solve(depth, tx, ty):
   cave = {(0, 0): depth}
-  for x in range(tx + 1000):
-    for y in range(ty + 1000):
+  for x in range(tx + 30):
+    for y in range(ty + 30):
       if (x, y) in ((0, 0), (tx, ty)): geo = 0
       elif x == 0: geo = y * 48271
       elif y == 0: geo = x * 16807
