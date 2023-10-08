@@ -20,8 +20,7 @@ def bfs(cave, target):
       heapq.heappush(queue, (minutes + 1, nx, ny, cannot))
 
 
-def solve(depth, tx, ty):
-  cave = {(0, 0): depth}
+def solve(depth, tx, ty, cave = {}):
   for x in range(tx + 30):
     for y in range(ty + 30):
       if (x, y) in ((0, 0), (tx, ty)): geo = 0
