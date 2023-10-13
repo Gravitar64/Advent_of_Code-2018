@@ -14,20 +14,20 @@ def parse(p):
     for i, group in enumerate(army[1:], start=1):
       numbers = map(int, re.findall('\d+', group))
       dtype = re.findall('(\w+) damage', group)[0]
-      weak = re.findall(r'weak to ([a-z, ]*){?|\)}', group)
-      if weak: 
-        weak = set(weak[0].split(', '))
-      immune = re.findall(r'immune to ([a-z, ]*){?|\)}', group)
-      if immune: 
-        immune = set(immune[0].split(', '))
+      
+      immune = re.findall(r'immune to ([\w, ]+)[;\)]', group)
+      weak = re.findall(r'weak to ([\w, ]+)[;\)]', group)
+      
+      if immune: immune = set(immune[0].split(', '))
+      if weak:  weak = set(weak[0].split(', '))
+      
       groups.append([i, name, *numbers, dtype, immune, weak, False])
   return groups
 
 
 def real_damage(enemie, defender):
-  if enemie[NAME] == defender[NAME]: return 0
-  if enemie[DTYPE] in defender[IMMUNE]: return 0
-  if enemie[DTYPE] in defender[WEAK]:  return enemie[UNITS] * enemie[DAMAGE] * 2
+  if enemie[NAME] == defender[NAME] or enemie[DTYPE] in defender[IMMUNE]: return 0
+  if enemie[DTYPE] in defender[WEAK]: return enemie[UNITS] * enemie[DAMAGE] * 2
   return enemie[UNITS] * enemie[DAMAGE]
 
 
@@ -68,9 +68,9 @@ def solve(p,part2):
       for g in groups: g[SELECT] = False
       armies = set([g[NAME] for g in groups])
       
+      if part2 and armies == {'Infection'}: break
       if not part2 and len(armies) == 1 or part2 and armies == {'Immune System'}:
         return sum(g[UNITS] for g in groups)
-      if part2 and armies == {'Infection'}: break
       
 
 start = time.perf_counter()
