@@ -49,52 +49,33 @@ def attack(enemie, defender):
   return kills
 
 
-def solve(p):
-  #part1
-  groups = parse(p)
-  while True:
-    pairs = target_selection(groups)
-    for enemie, defender in sorted(pairs, key=lambda pair: -pair[0][INIT]):
-      attack(enemie, defender)
-    
-    groups = [g for g in groups if g[UNITS] > 0]
-    
-    for g in groups:
-      g[SELECT] = False
-    
-    if len(set([g[NAME] for g in groups])) == 1:
-      part1 = sum(g[UNITS] for g in groups)
-      break
-
-  #part2
-  for boost in range(2000):
+def solve(p,part2):
+  loops = 2000 if part2 else 1
+  for boost in range(loops):
     groups = parse(p)
-    for g in groups:
-      if g[NAME] == 'Infection': continue
-      g[DAMAGE] += boost
+    if part2:
+      for g in groups:
+        if g[NAME] == 'Infection': continue
+        g[DAMAGE] += boost
+    
     while True:
       pairs = target_selection(groups)
       attacking_sequenz = sorted(pairs, key=lambda pair: -pair[0][INIT])
-      kills = [attack(enemie, defender) == 0 for enemie,
-               defender in attacking_sequenz]
+      kills = [attack(enemie, defender) == 0 for enemie,defender in attacking_sequenz]
       
       if all(kills): break
-
       groups = [g for g in groups if g[UNITS] > 0]
-      for g in groups:
-        g[SELECT] = False
-
+      for g in groups: g[SELECT] = False
       armies = set([g[NAME] for g in groups])
-      if armies == {'Immune System'}:
-        return part1, sum(g[UNITS] for g in groups)
-      if armies == {'Infection'}:
-        break
-
+      
+      if not part2 and len(armies) == 1 or part2 and armies == {'Immune System'}:
+        return sum(g[UNITS] for g in groups)
+      if part2 and armies == {'Infection'}: break
+      
 
 start = time.perf_counter()
 ID, NAME, UNITS, HP, DAMAGE, INIT, DTYPE, IMMUNE, WEAK, SELECT = range(10)
 puzzle = load('day_24.txt')
-part1, part2 = solve(puzzle)
-print(f'Part1: {part1}')
-print(f'Part2: {part2}')
+print(f'Part1: {solve(puzzle,False)}')
+print(f'Part2: {solve(puzzle,True)}')
 print(f'Ermittelt in {time.perf_counter()-start:.5f}')
