@@ -1,6 +1,7 @@
 import time
 import re
 
+ID, NAME, UNITS, HP, DAMAGE, INIT, DTYPE, IMMUNE, WEAK = range(9)
 
 class Group:
   def __init__(self,id,army,units,hp,damage,init,dtype,immune,weak):
@@ -68,10 +69,8 @@ def solve(p):
   while True:
     pairs = target_selection(groups)
     pairs = sorted(pairs,key=lambda x: -x[0].init)
-    kills = []
     for attacker, defender in pairs:
-      kills.append(defender.attacked_by(attacker))
-    if all(kills): break
+      defender.attacked_by(attacker)
     
     groups = [group for group in groups if group.units > 0]
     for g in groups: g.selected = False          
@@ -82,7 +81,6 @@ def solve(p):
 
   for boost in range(2000):
     groups = parse(p)
-
     for g in groups: 
       if g.army == 'Immune System': 
         g.damage += boost
@@ -91,9 +89,8 @@ def solve(p):
     while True:
       pairs = target_selection(groups)
       pairs = sorted(pairs,key=lambda x: -x[0].init)
-      for attacker, defender in pairs:
-        defender.attacked_by(attacker)
-      
+      kills = [defender.attacked_by(attacker) for attacker, defender in pairs]
+      if all(kills): break
       groups = [group for group in groups if group.units > 0]
       for g in groups: g.selected = False          
       armies = {g.army for g in groups}
@@ -102,17 +99,6 @@ def solve(p):
         print(boost)
         return part1, sum(g.units for g in groups)
         
-        
-    
-    
-    
-      
-      
-
-
-       
-
-  
 
 start = time.perf_counter()
 puzzle = load('day_24.txt')
